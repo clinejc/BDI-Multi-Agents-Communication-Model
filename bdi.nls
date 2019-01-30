@@ -51,19 +51,19 @@ end
 
 ;;; Reports true if a belief in the form of ["b-type" etc etc etc ...] exist in beliefs list
 to-report exist-beliefs-of-type [b-type]
-  let blfs filter [first ? = b-type] beliefs
+  let blfs filter [x -> first x = b-type] beliefs
   ifelse empty? blfs [report false] [report true]
 end
 
 ;;; Returns all beliefs of b-type in a list
 to-report beliefs-of-type [b-type]
-  report filter [first ? = b-type] beliefs
+  report filter [x -> first x = b-type] beliefs
 end
 
 ;;; Returns the first belief of a certain type and removes it
 to-report get-belief [b-type]
   ifelse exist-beliefs-of-type b-type 
-  [let bel first filter [first ? = b-type] beliefs
+  [let bel first filter [x -> first x = b-type] beliefs
    remove-belief bel
    report bel
   ]

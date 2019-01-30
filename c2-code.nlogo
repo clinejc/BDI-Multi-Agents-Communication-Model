@@ -5,11 +5,11 @@ __includes ["communication.nls" "bdi.nls"]
 
 
 globals [dead-trees saved-trees fires-left-in-sim units-destroyed]
-breed [ units ]
-breed [ scouters ]
-breed [ trees ]
-breed [ fires ]
-breed [ fires-out ]
+breed [ units unit ]
+breed [ scouters scourter ]
+breed [ trees tree ]
+breed [ fires fire ]
+breed [ fires-out a-fires-out ]
 
 patches-own [ signal ]
 units-own [water beliefs intentions incoming-queue]
@@ -279,8 +279,8 @@ to-report closest-fire-location
   let closest-distance (abs (xcor - closest-x)) + (abs (ycor - closest-y)) ;; calculate Manhatten distance to current closest
 
   ;;iterate through the list to find the closest
-  foreach fire-beliefs[
-    let new-location last ? ;; ? represents the current belief in the list we are looking at. "last" gets the coordinate of the fire from the belief.
+  foreach fire-beliefs[ x ->
+    let new-location last x ;; ? represents the current belief in the list we are looking at. "last" gets the coordinate of the fire from the belief.
     let new-x first new-location ;; x coordinate of location
     let new-y last new-location ;; y coordinate of location
 
@@ -307,7 +307,7 @@ to-report closest-fire-location
 
     if (new-distance < closest-distance)[ ;; the new location is closer, update closest to be the new location
       set closest-location new-location
-      set closest-belief ?
+      set closest-belief x
       set closest-x new-x
       set closest-y new-y
       set closest-distance new-distance
@@ -464,8 +464,8 @@ foreach (list (patch-ahead 1)
     (patch-left-and-ahead 20 1)
     (patch-right-and-ahead 20 1)
          )
-  [if any? fires-on ? [report true]
-   if any? units-on ? and not (count units-on ? = 1 and one-of units-on ? = self) [report true]
+  [x -> if any? fires-on x [report true]
+   if any? units-on x and not (count units-on x = 1 and one-of units-on x = self) [report true]
   ]
 report false
 end
@@ -476,7 +476,7 @@ foreach (list (patch-ahead 1)
       (patch-left-and-ahead 20 1)
       (patch-right-and-ahead 20 1)
          )
-  [if any? fires-on ? [report true]]
+  [x -> if any? fires-on x [report true]]
 report false
 end
 
@@ -637,10 +637,10 @@ end
 GRAPHICS-WINDOW
 327
 10
-1015
-506
-25
-17
+1013
+484
+-1
+-1
 13.3
 1
 10
@@ -721,7 +721,7 @@ initial-water
 initial-water
 0
 50
-25
+0.0
 1
 1
 NIL
@@ -1243,9 +1243,8 @@ Line -16777216 false 58 211 67 192
 Polygon -6459832 true true 38 138 66 149
 Polygon -6459832 true true 46 128 33 120 21 118 11 123 3 138 5 160 13 178 9 192 0 199 20 196 25 179 24 161 25 148 45 140
 Polygon -6459832 true true 67 122 96 126 63 144
-
 @#$#@#$#@
-NetLogo 5.3.1
+NetLogo 6.0.4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
@@ -1289,7 +1288,6 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@

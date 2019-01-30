@@ -27,8 +27,8 @@
 ;; The commented out line represents an alternative method. 
 to send [msg]
   let recipients get-receivers msg
-  foreach recipients [
-   without-interruption [ask turtle (read-from-string ?) [receive msg]] ;; read-from-string is required to convert the string to number
+  foreach recipients [x ->
+   without-interruption [ask turtle (read-from-string x) [receive msg]] ;; read-from-string is required to convert the string to number
   ]
 end
 
@@ -61,8 +61,8 @@ end
 
 ;; broadcasting to all agents of breed t-breed
 to broadcast-to [t-breed msg]
-  foreach [who] of t-breed [
-     send add-receiver ? msg    
+  foreach [who] of t-breed [x ->
+     send add-receiver x msg    
   ]
 end 
 
@@ -84,7 +84,7 @@ end
 ;; Accesing information on Messages
 ;; Reports the sender of a message
 to-report get-sender [msg]
-  report remove "sender:" first (filter [not is-number? ? and member? "sender:" ?] msg) 
+  report remove "sender:" first (filter [x -> not is-number? x and member? "sender:" x] msg) 
   ;;report item ((position "sender:" msg) + 1) msg 
 end
 
@@ -95,7 +95,7 @@ end
 
 ;; Reports the list of receivers of a message
 to-report get-receivers [msg]
-  report map [remove "receiver:" ?] filter [not is-number? ? and member? "receiver:" ?] msg
+  report map [x -> remove "receiver:" x] filter [x -> not is-number? x and member? "receiver:" x] msg
 end 
 
 ;; reports the message performative. 
@@ -117,8 +117,8 @@ end
 ;; adding multiple recipients
 to-report add-multiple-receivers [receivers msg]
   foreach receivers
-  [
-    set msg add-receiver ? msg
+  [ x ->
+    set msg add-receiver x msg
   ]
   report msg
 end
